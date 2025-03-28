@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('contributions', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('member_id');
-            $table->date('date');
+            $table->date('date')->nullable();
             $table->decimal('amount', 8, 2);
             $table->string('type');
             $table->string('status');
