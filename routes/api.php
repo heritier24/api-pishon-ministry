@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ContributionController;
+use App\Http\Controllers\Api\DashboardController;
 use App\Http\Controllers\Api\DonationController;
 use App\Http\Controllers\Api\EventController;
 use App\Http\Controllers\Api\MemberController;
@@ -27,6 +28,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('contributions', ContributionController::class);
     Route::apiResource('events', EventController::class);
     Route::apiResource('donations', DonationController::class);
+    Route::get('/dashboard', [DashboardController::class, 'index']);
 });
 
 Route::post('/register', [AuthController::class, 'register']);
