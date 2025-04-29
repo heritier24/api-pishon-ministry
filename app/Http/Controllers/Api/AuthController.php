@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
@@ -37,5 +38,30 @@ class AuthController extends Controller
                 'token' => $token,
             ],
         ], 201);
+    }
+
+    public function updateProfile(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'userId' => 'required',
+            'email' => 'required|email|unique:users,email,' . $request->userId,
+            'password' => 'nullable|min:8|confirmed',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['message' => $validator->errors()->first()], 422);
+        }
+
+        $user = User::find($request->userId);
+        $user->email = $request->email;
+        if ($request->filled('password')) {
+            $user->password = Hash::make($request->password);
+        }
+        $user->save();
+
+        return response()->json([
+            'user' => $user,
+            'message' => 'Profile updated successfully'
+        ]);
     }
 }
